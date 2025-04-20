@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration - Events</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h2 class="mb-4">Event Selection</h2>
+    <form id="regForm2" action="/register" method="POST">
+      <div class="mb-3">
+        <label for="event1" class="form-label">Select Event 1</label>
+        <select class="form-select" id="event1" required>
+          <option value="">-- Select Event --</option>
+          <option>A (Open)</option>
+          <option>B (90+ Combined)</option>
+          <option>C (105+ Combined)</option>
+          <option>D (120+ Combined)</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="partner1" class="form-label">Partner 1 (Name)</label>
+        <input type="text" class="form-control" id="partner1" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="event2" class="form-label">Select Event 2 (Optional)</label>
+        <select class="form-select" id="event2">
+          <option value="">-- Select Event --</option>
+          <option>A (Open)</option>
+          <option>B (90+ Combined)</option>
+          <option>C (105+ Combined)</option>
+          <option>D (120+ Combined)</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="partner2" class="form-label">Partner 2 (Name)</label>
+        <input type="text" class="form-control" id="partner2" />
+      </div>
+
+      <button type="submit" class="btn btn-success">Submit Registration</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('regForm2').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const page1Data = JSON.parse(localStorage.getItem('playerData'));
+      const page2Data = {
+        event1: document.getElementById('event1').value,
+        partner1: document.getElementById('partner1').value,
+        event2: document.getElementById('event2').value,
+        partner2: document.getElementById('partner2').value
+      };
+
+      const finalData = { ...page1Data, ...page2Data };
+
+      try {
+        const response = await fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(finalData)
+        });
+
+        if (response.ok) {
+          alert("Registration successful!");
+          window.location.href = "index.html";
+        } else {
+          alert("Error saving registration.");
+        }
+      } catch (err) {
+        alert("Server not reachable.");
+      }
+    });
+  </script>
+</body>
+</html>
